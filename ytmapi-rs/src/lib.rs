@@ -92,6 +92,9 @@ use continuations::ParseFromContinuable;
 pub use error::{Error, Result};
 use futures::Stream;
 use json::Json;
+use oauth2::basic::BasicTokenType;
+use oauth2::{StandardTokenResponse,ExtraTokenFields};
+use std::time::{SystemTime};
 use parse::ParseFrom;
 #[doc(inline)]
 pub use parse::ProcessedResult;
@@ -199,6 +202,19 @@ impl YtMusic<OAuthToken> {
     pub fn from_oauth_token(token: OAuthToken) -> YtMusic<OAuthToken> {
         let client = Client::new().expect("Expected Client build to succeed");
         YtMusic { client, token }
+    }
+
+    pub fn from_standard_token_response<EF>(
+        token: StandardTokenResponse<EF, BasicTokenType>,
+        request_time: SystemTime,
+        client_id: String,
+        client_secret: String,
+    ) -> Result<Self>
+    where
+        EF: ExtraTokenFields,
+    {
+        let token = OAuthToken::from_standard_token_response(token, request_time,client_id,client_secret)?;
+        Ok(Self::from_oauth_token(token))
     }
     /// Refresh the internal oauth token, and return a clone of it (for user to
     /// store locally, e.g).

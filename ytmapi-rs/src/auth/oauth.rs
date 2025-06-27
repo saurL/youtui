@@ -6,11 +6,12 @@ use crate::utils::constants::{
     OAUTH_CODE_URL, OAUTH_GRANT_URL, OAUTH_SCOPE, OAUTH_TOKEN_URL, OAUTH_USER_AGENT, USER_AGENT,
     YTM_URL,
 };
+use oauth2::basic::BasicTokenType;
 use serde::{Deserialize, Serialize};
 use serde_json::json;
 use std::borrow::Cow;
 use std::time::{SystemTime, UNIX_EPOCH};
-
+use oauth2::{ExtraTokenFields, StandardTokenResponse, TokenResponse};
 /// Since we detect oauth expiry on the client side, to reduce risk of race
 /// conditions we refresh `REFRESH_S_BEFORE_EXPIRING` seconds before the token
 /// is due to expire.
@@ -111,6 +112,47 @@ impl OAuthToken {
             client_id,
             client_secret,
         }
+    }
+
+    pub fn from_standard_token_response<EF>(
+        token: StandardTokenResponse<EF, BasicTokenType>,
+        request_time: SystemTime,
+        client_id: String,
+        client_secret: String,
+    ) -> Result<Self>
+    where
+        EF: ExtraTokenFields,
+    {
+        let refresh_token = match token
+        .refresh_token()
+        {
+            Some(rt) => rt.secret().to_string(),
+            None => {
+                return Err(Error::response(
+                    "OAuth token response did not contain a refresh token",
+                ))
+            }
+            
+        };
+
+        let access_token = token.access_token().secret().to_string();
+        let expires_in = token.expires_in().map_or(0, |d| d.as_secs() as usize);
+        let token_type = match token.token_type() {
+            BasicTokenType::Bearer => "Bearer".to_string(),
+            BasicTokenType::Mac => "Mac".to_string(),
+            BasicTokenType::Extension(ext) => {ext.to_owned()}
+        };
+        
+        
+        Ok(Self {
+                    token_type,
+                    refresh_token,
+                    access_token,
+                    request_time,
+                    expires_in,
+                    client_id,
+                    client_secret,
+                })
     }
 }
 
