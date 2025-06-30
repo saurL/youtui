@@ -64,6 +64,25 @@ pub struct OAuthTokenGenerator {
 }
 
 impl OAuthToken {
+    pub fn new(
+        token_type: String,
+        access_token: String,
+        refresh_token: String,
+        expires_in: usize,
+        request_time: SystemTime,
+        client_id: String,
+        client_secret: String,
+    ) -> Self {
+        Self {
+            token_type,
+            access_token,
+            refresh_token,
+            expires_in,
+            request_time,
+            client_id,
+            client_secret,
+        }
+    }
     fn from_google_refresh_token(
         google_token: GoogleOAuthRefreshToken,
         request_time: SystemTime,
