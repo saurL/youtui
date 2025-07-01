@@ -23,10 +23,10 @@ const REFRESH_S_BEFORE_EXPIRING: u64 = 60;
 #[derive(Clone, Serialize, Deserialize, PartialEq, Eq, Hash)]
 pub struct OAuthToken {
     token_type: String,
-    access_token: String,
-    refresh_token: String,
-    expires_in: usize,
-    request_time: SystemTime,
+    pub access_token: String,
+    pub refresh_token: String,
+    pub expires_in: usize,
+    pub request_time: SystemTime,
     client_id: String,
     client_secret: String,
 }
