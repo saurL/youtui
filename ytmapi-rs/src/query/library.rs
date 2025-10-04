@@ -129,7 +129,7 @@ impl<A: LoggedIn> Query<A> for GetLibraryPlaylistsQuery {
 }
 impl PostQuery for GetLibraryPlaylistsQuery {
     fn header(&self) -> serde_json::Map<String, serde_json::Value> {
-        FromIterator::from_iter([("browseId".to_string(), json!("FEmusic_liked_playlists"))])
+        FromIterator::from_iter([("browseId".to_string(), json!("FEmusic_library_playlists"))])
     }
     fn path(&self) -> &str {
         "browse"
