@@ -282,6 +282,7 @@ impl<A: AuthToken> YtMusic<A> {
     /// # };
     /// ```
     pub async fn query<Q: Query<A>>(&self, query: impl Borrow<Q>) -> Result<Q::Output> {
+        println!("Running query: {:?}", query.borrow());
         Q::Output::parse_from(
             Q::Method::call(query.borrow(), &self.client, &self.token)
                 .await?
