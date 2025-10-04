@@ -79,6 +79,10 @@ pub(crate) async fn raw_query_post<'a, A: AuthToken, Q: PostQuery>(
     } else {
         unreachable!("Body created in this function as an object")
     };
+    println!("POST body: {}", body);
+    println!("POST url: {}", url);
+    println!("POST params: {:?}", q.params());
+    println!("POST headers: {:?}", tok.headers()?);
     let QueryResponse { text, .. } = c
         .post_json_query(url, tok.headers()?, &body, &q.params())
         .await?;
