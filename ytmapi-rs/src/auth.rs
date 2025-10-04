@@ -82,6 +82,8 @@ pub(crate) async fn raw_query_post<'a, A: AuthToken, Q: PostQuery>(
     println!("POST body: {}", body);
     println!("POST url: {}", url);
     println!("POST params: {:?}", q.params());
+    let headers = tok.headers()?.into_iter().collect::<Vec<_>>();
+    println!("Headers: {:?}", headers);
     let QueryResponse { text, .. } = c
         .post_json_query(url, tok.headers()?, &body, &q.params())
         .await?;
