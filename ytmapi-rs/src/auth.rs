@@ -24,6 +24,7 @@ pub trait AuthToken: Sized {
     fn headers(&self) -> Result<impl IntoIterator<Item = (&str, Cow<str>)>>;
     fn client_version(&self) -> Cow<str>;
     fn deserialize_response<Q>(raw: RawResult<Q, Self>) -> Result<ProcessedResult<Q>>;
+    fn client_name(&self) -> Cow<str>;
 }
 
 /// The raw result of a query to the API.
@@ -68,7 +69,7 @@ pub(crate) async fn raw_query_post<'a, A: AuthToken, Q: PostQuery>(
     let mut body = json!({
         "context" : {
             "client" : {
-                "clientName" : "WEB_REMIX",
+                "clientName" : tok.client_name(),
                 "clientVersion" : tok.client_version(),
                 "user" : {},
             },

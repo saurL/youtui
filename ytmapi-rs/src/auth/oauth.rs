@@ -182,8 +182,11 @@ impl AuthToken for OAuthToken {
         ])
     }
     fn client_version(&self) -> Cow<str> {
-        let now_datetime: chrono::DateTime<chrono::Utc> = SystemTime::now().into();
-        fallback_client_version(&now_datetime).into()
+        return "6.42".into();
+    }
+
+    fn client_name(&self) -> Cow<str> {
+        "IOS_MUSIC".into()
     }
 }
 
