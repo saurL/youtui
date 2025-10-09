@@ -10,7 +10,8 @@ pub mod constants {
     pub const OAUTH_SCOPE: &str = "https://www.googleapis.com/auth/youtube";
     pub const OAUTH_CODE_URL: &str = "https://www.youtube.com/o/oauth2/device/code";
     pub const OAUTH_TOKEN_URL: &str = "https://oauth2.googleapis.com/token";
-    pub const OAUTH_USER_AGENT: &str = concatcp!(USER_AGENT, " Cobalt/Version");
+    pub const OAUTH_USER_AGENT: &str =
+        "com.google.ios.youtube/20.38.4 (iPhone17,3; U; CPU iOS 18_6_2 like Mac OS X; en_US)";
     pub const OAUTH_GRANT_URL: &str = "http://oauth.net/grant_type/device/1.0";
     pub const DEFAULT_X_GOOG_AUTHUSER: &str = "0";
 }
